@@ -811,22 +811,41 @@ export async function analyzeDocumentStructure(fileParts: any[]): Promise<Docume
              return await client.models.generateContent({
                 model: effectiveModel,
                 contents: [{ role: 'user', parts: [...fileParts, { text: `
-                You are a FINANCIAL DOCUMENT CLASSIFIER. Follow this DECISION TREE in strict order:
+                You are a FINANCIAL DOCUMENT CLASSIFIER specializing in ETF and stock charts. Follow this DECISION TREE in strict order:
                 
                 **STEP 1: CHECK FOR FINANCIAL MARKET INDICATORS (HIGHEST PRIORITY)**
                 If the document contains ANY of these, classify as FINANCIAL_MARKET immediately:
-                - Stock tickers (e.g., AAPL, TATSILV, TATAGOLD, NIFTY, SENSEX)
-                - Trading charts with candlesticks, price lines, or volume bars
-                - Technical indicators: RSI, MACD, EMA, SMA, Bollinger Bands, Stochastic
-                - Time-series price data (daily/weekly/monthly prices)
-                - Market terms: Bull/Bear, Support/Resistance, Breakout, Trend
-                - Portfolio holdings, NAV, Asset Allocation
-                - Brokerage names: Zerodha, Groww, Robinhood, E*TRADE
-                - ETF names containing: Gold, Silver, Commodity, Index
-                - Currency symbols with numbers: $, ₹, €, £ followed by amounts
-                - Words: "Investment", "Returns", "Profit/Loss", "Trading"
                 
-                **CRITICAL**: If you see a chart with a Y-axis labeled "Price" or "Value" and X-axis labeled with dates/time, this is FINANCIAL_MARKET, NOT technical schematics.
+                **CHARTS & IMAGES:**
+                - ANY chart showing price movement over time (line, candlestick, bar charts)
+                - Y-axis labeled with: Price, Value, Amount, ₹, $, €, £, or numbers like 100, 200, 300
+                - X-axis labeled with: Dates, Time, Days, Months, Years, or date ranges
+                - Green/Red candlesticks or bars (indicating price up/down)
+                - Volume bars at bottom of charts
+                - Moving average lines overlaid on charts
+                
+                **ETF SPECIFIC:**
+                - TATA Silver ETF, TATA Gold ETF, or any ETF name
+                - NAV (Net Asset Value) mentions
+                - Asset allocation pie charts
+                - Portfolio composition tables
+                
+                **TRADING INDICATORS:**
+                - Stock tickers: AAPL, TATSILV, TATAGOLD, NIFTY, SENSEX, NSE, BSE
+                - Technical indicators: RSI, MACD, EMA, SMA, Bollinger Bands, Stochastic, ATR
+                - Terms: Bull/Bear, Support/Resistance, Breakout, Trend, Momentum
+                - Brokerage names: Zerodha, Groww, Upstox, Robinhood, E*TRADE
+                
+                **FINANCIAL DATA:**
+                - Time-series price data (daily/weekly/monthly prices)
+                - Currency symbols: $, ₹, €, £ followed by amounts
+                - Words: Investment, Returns, Profit, Loss, Trading, Portfolio, Equity, Mutual Fund
+                
+                **CRITICAL RULES:**
+                1. ANY chart showing prices over time = FINANCIAL_MARKET (NOT TECHNICAL_SRE)
+                2. If you see numbers on Y-axis and dates on X-axis = FINANCIAL_MARKET
+                3. Charts with candlesticks, price lines, or volume = FINANCIAL_MARKET
+                4. ETF, stock names, or tickers anywhere = FINANCIAL_MARKET
                 
                 **STEP 2: CHECK FOR TAX DOCUMENTS**
                 Only if Step 1 fails, check for: Tax forms (1040, W-2, Form 16, ITR), Tax jurisdiction mentions.
@@ -836,16 +855,18 @@ export async function analyzeDocumentStructure(fileParts: any[]): Promise<Docume
                 
                 **STEP 4: CHECK FOR TECHNICAL_SRE (LAST PRIORITY)**
                 Only classify as TECHNICAL_SRE if document contains:
-                - Source code (Python, Java, TypeScript, Go)
+                - Source code (Python, Java, TypeScript, Go, SQL)
                 - Infrastructure configs (Kubernetes YAML, Terraform, Docker)
-                - Server logs with stack traces or HTTP status codes
-                - Network diagrams WITHOUT financial data
+                - Server logs with stack traces or HTTP 500/404 errors
+                - Network/system architecture diagrams WITHOUT any financial data
                 - CI/CD pipeline configurations
+                - Server metrics (CPU, RAM, disk) WITHOUT price/revenue data
                 
                 **NEVER classify as TECHNICAL_SRE if:**
-                - Document has price information
-                - Document shows market data or trading activity
-                - Charts display financial metrics
+                - Document has ANY price, currency, or monetary information
+                - Charts show market data, trading activity, or financial performance
+                - Contains stock tickers, ETF names, or brokerage references
+                - Y-axis shows monetary values or X-axis shows time periods for prices
 
                 **STEP 5: DEFAULT TO OTHER**
                 If none of the above match clearly.
@@ -889,14 +910,32 @@ export async function analyzeDocumentStructure(fileParts: any[]): Promise<Docume
         let finalCategory = result.category || 'OTHER';
         const responseText = JSON.stringify(result).toLowerCase();
         
-        const financialKeywords = ['tatsilv', 'tatagold', 'nifty', 'sensex', 'rsi', 'ema', 'macd', 'candlestick', 
-                                   'portfolio', 'etf', 'stock', 'trading', 'investment', 'zerodha', 'groww'];
-        const hasFinancialKeywords = financialKeywords.some(kw => responseText.includes(kw));
+        // Also check the original file content for financial keywords
+        const fileContent = fileParts.map(p => p.text || '').join(' ').toLowerCase();
+        const combinedContent = responseText + ' ' + fileContent;
         
-        if (finalCategory === 'TECHNICAL_SRE' && hasFinancialKeywords) {
-            console.warn('[CLASSIFICATION_OVERRIDE]: Detected financial keywords but classified as TECHNICAL_SRE. Overriding to FINANCIAL_MARKET.');
+        const financialKeywords = ['tatsilv', 'tatagold', 'nifty', 'sensex', 'rsi', 'ema', 'macd', 'sma', 'candlestick', 
+                                   'portfolio', 'etf', 'stock', 'trading', 'investment', 'zerodha', 'groww', 'broker',
+                                   'equity', 'mutual fund', 'market', 'price', 'ticker', 'returns', 'profit', 'loss'];
+        const hasFinancialKeywords = financialKeywords.some(kw => combinedContent.includes(kw));
+        
+        // Enhanced validation: also check entities for financial tickers
+        const entities = (result.metadata?.entities || []).map((e: string) => e.toLowerCase());
+        const hasFinancialEntities = entities.some((e: string) => 
+            e.includes('tata') || e.includes('nifty') || e.includes('sensex') || 
+            e.includes('gold') || e.includes('silver') || e.includes('equity')
+        );
+        
+        if (finalCategory === 'TECHNICAL_SRE' && (hasFinancialKeywords || hasFinancialEntities)) {
+            console.warn('[CLASSIFICATION_OVERRIDE]: Detected financial indicators but classified as TECHNICAL_SRE. Overriding to FINANCIAL_MARKET.');
+            console.log('  → Financial keywords found:', financialKeywords.filter(kw => combinedContent.includes(kw)));
+            console.log('  → Financial entities found:', entities.filter((e: string) => 
+                e.includes('tata') || e.includes('nifty') || e.includes('sensex')
+            ));
             finalCategory = 'FINANCIAL_MARKET';
         }
+        
+        console.log('[FINAL_CLASSIFICATION]:', finalCategory, 'Confidence:', result.metadata?.confidence);
         
         return {
             category: finalCategory,

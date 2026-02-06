@@ -1,12 +1,38 @@
 {
   "name": "sre-synapse",
-  "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "description": "AI-Powered Site Reliability Engineering Intelligence Platform - Enterprise-grade document analysis, real-time chat, and system monitoring powered by Google Gemini AI",
+  "author": "Future Tech Vision",
+  "license": "Apache-2.0",
+  "private": false,
   "type": "module",
+  "keywords": [
+    "sre",
+    "ai",
+    "gemini",
+    "document-analysis",
+    "site-reliability-engineering",
+    "machine-learning",
+    "nlp",
+    "typescript",
+    "react",
+    "vite"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/FutureTechVision-IN/sre-ai-synapse-core.git"
+  },
+  "bugs": {
+    "url": "https://github.com/FutureTechVision-IN/sre-ai-synapse-core/issues"
+  },
+  "homepage": "https://github.com/FutureTechVision-IN/sre-ai-synapse-core#readme",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "echo \"Error: no test runner configured\" && exit 1",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "format": "prettier --write \"**/*.{ts,tsx,json,md}\""
   },
   "dependencies": {
     "react": "18.3.1",

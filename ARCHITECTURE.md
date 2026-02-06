@@ -2,7 +2,7 @@
 
 ## System Architecture Overview
 
-SRE Synapse is built as a modern web application leveraging React for the frontend, Google Gemini AI for intelligent processing, and a resilient service architecture for reliability.
+SRE Synapse is built as a modern web application leveraging React for the frontend, Google Gemini AI for intelligent processing, and a resilient service architecture for service readiness.
 
 ---
 
@@ -128,9 +128,9 @@ Step 3: Lottery/Gaming
   - Lottery tickets, betting slips
   - If found → LOTTERY
   
-Step 4: Technical/SRE (LOWEST PRIORITY)
+Step 4: Technical/Service Readiness (LOWEST PRIORITY)
   - Source code, infrastructure configs, logs
-  - If found AND no financial data → TECHNICAL_SRE
+  - If found AND no financial data → TECHNICAL_SERVICE_READINESS
   
 Step 5: Default
   - If none match → OTHER

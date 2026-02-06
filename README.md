@@ -2,7 +2,7 @@
   
 # 🧠 SRE Synapse
 
-### AI-Powered Site Reliability Engineering Intelligence Platform
+### AI-Powered Service Readiness Engineering Intelligence Platform
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.8.2-blue)](https://www.typescriptlang.org/)
@@ -41,7 +41,7 @@ An advanced AI-powered platform that transforms how Site Reliability Engineers i
 
 ## 🌟 Overview
 
-**SRE Synapse** is an enterprise-grade AI platform designed specifically for Site Reliability Engineering teams. It leverages Google's Gemini AI to provide intelligent document analysis, real-time chat capabilities, and comprehensive system monitoring through a beautiful, futuristic neural interface.
+**SRE Synapse** is an enterprise-grade AI platform designed specifically for Service Readiness Engineering teams. It leverages Google's Gemini AI to provide intelligent document analysis, real-time chat capabilities, and comprehensive system monitoring through a beautiful, futuristic neural interface.
 
 ### Key Capabilities
 
@@ -59,7 +59,7 @@ An advanced AI-powered platform that transforms how Site Reliability Engineers i
 ### Core Features
 
 #### 🧠 Intelligent Document Classification
-- **Multi-Category Detection**: Automatically categorizes documents into Income Tax, Financial Markets, Technical/SRE, Lottery, or General
+- **Multi-Category Detection**: Automatically categorizes documents into Income Tax, Financial Markets, Technical/Service Readiness, Lottery, or General
 - **ETF & Trading Chart Recognition**: Specialized detection for TATA Gold/Silver, NIFTY, SENSEX, and technical indicators (RSI, MACD, EMA)
 - **Financial Keyword Validation**: 24+ keyword post-validation ensures accurate classification
 - **Entity Extraction**: Identifies stock tickers, tax jurisdictions, and domain-specific entities
@@ -372,7 +372,7 @@ For Tax Documents:
 
 For Technical Documents:
 - "Explain the Kubernetes configuration"
-- "Identify potential SRE issues"
+- "Identify potential service readiness issues"
 - "Summarize error logs"
 ```
 
@@ -444,7 +444,7 @@ Classifies documents and generates contextual questions.
 **Returns**:
 ```typescript
 {
-  category: 'INCOME_TAX' | 'FINANCIAL_MARKET' | 'TECHNICAL_SRE' | 'LOTTERY' | 'OTHER',
+  category: 'INCOME_TAX' | 'FINANCIAL_MARKET' | 'TECHNICAL_SERVICE_READINESS' | 'LOTTERY' | 'OTHER',
   questions: string[],
   metadata: {
     jurisdiction?: string,

@@ -1,6 +1,6 @@
 # Contributing to SRE Synapse
 
-First off, thank you for considering contributing to SRE Synapse! It's people like you that make this platform a great tool for the Site Reliability Engineering community.
+First off, thank you for considering contributing to SRE Synapse! It's people like you that make this platform a great tool for the Service Readiness Engineering community.
 
 ## Table of Contents
 

@@ -1,7 +1,7 @@
 {
   "name": "sre-synapse",
   "version": "1.0.0",
-  "description": "AI-Powered Site Reliability Engineering Intelligence Platform - Enterprise-grade document analysis, real-time chat, and system monitoring powered by Google Gemini AI",
+  "description": "AI-Powered Service Readiness Engineering Intelligence Platform - Enterprise-grade document analysis, real-time chat, and system monitoring powered by Google Gemini AI",
   "author": "Future Tech Vision",
   "license": "Apache-2.0",
   "private": false,
@@ -11,7 +11,7 @@
     "ai",
     "gemini",
     "document-analysis",
-    "site-reliability-engineering",
+    "service-readiness-engineering",
     "machine-learning",
     "nlp",
     "typescript",

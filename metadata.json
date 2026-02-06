@@ -1,0 +1,8 @@
+{
+  "name": "SRE SYNAPSE",
+  "description": "System Yield & Neural Agentic Processing Search Engine. An enterprise-grade agentic RAG platform for high-performance service readiness engineering.",
+  "requestFramePermissions": [
+    "microphone",
+    "camera"
+  ]
+}

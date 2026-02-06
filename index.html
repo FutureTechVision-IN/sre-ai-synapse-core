@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SRE SYNAPSE // NEURAL AGENTIC CORE</title>
+    <script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@18.3.1",
+    "react/": "https://esm.sh/react@18.3.1/",
+    "react-dom": "https://esm.sh/react-dom@18.3.1",
+    "react-dom/": "https://esm.sh/react-dom@18.3.1/",
+    "@google/genai": "https://esm.sh/@google/genai@^1.29.0",
+    "three": "https://esm.sh/three@0.170.0",
+    "@react-three/fiber": "https://esm.sh/@react-three/fiber@8.17.10?external=react,react-dom,three",
+    "@react-three/drei": "https://esm.sh/@react-three/drei@9.114.0?external=react,react-dom,three,@react-three/fiber",
+    "recharts": "https://esm.sh/recharts@2.12.7?external=react,react-dom",
+    "jspdf": "https://esm.sh/jspdf@2.5.1",
+    "jspdf-autotable": "https://esm.sh/jspdf-autotable@3.8.2",
+    "this": "https://esm.sh/this@^1.1.0",
+    "tailwind-merge": "https://esm.sh/tailwind-merge@^3.4.0",
+    "clsx": "https://esm.sh/clsx@^2.1.1",
+    "@splinetool/react-spline": "https://esm.sh/@splinetool/react-spline@^4.1.0"
+  }
+}
+</script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              'gem-onyx': '#050505',
+              'gem-slate': '#0a0a0a',
+              'gem-mist': '#121212',
+              'gem-offwhite': '#f0f0f0',
+              'gem-teal': '#00FF94', // Signal Green
+              'gem-blue': '#00F0FF', // Cyberpunk Blue
+              'gem-void': '#000000',
+            },
+            keyframes: {
+              'scan': {
+                '0%': { transform: 'translateY(-100%)' },
+                '100%': { transform: 'translateY(100%)' },
+              },
+              'pulse-neon': {
+                '0%, 100%': { opacity: '0.4', filter: 'drop-shadow(0 0 5px #00F0FF)' },
+                '50%': { opacity: '1', filter: 'drop-shadow(0 0 20px #00F0FF)' },
+              },
+              'glitch': {
+                '0%': { clipPath: 'inset(80% 0 0 0)' },
+                '10%': { clipPath: 'inset(10% 0 85% 0)' },
+                '20%': { clipPath: 'inset(60% 0 35% 0)' },
+                '30%': { clipPath: 'inset(30% 0 65% 0)' },
+                '40%': { clipPath: 'inset(50% 0 50% 0)' },
+                '50%': { clipPath: 'inset(10% 0 80% 0)' },
+                '60%': { clipPath: 'inset(70% 0 20% 0)' },
+                '70%': { clipPath: 'inset(40% 0 55% 0)' },
+                '80%': { clipPath: 'inset(20% 0 75% 0)' },
+                '90%': { clipPath: 'inset(90% 0 5% 0)' },
+                '100%': { clipPath: 'inset(80% 0 0 0)' },
+              },
+              'progress-infinite': {
+                '0%': { left: '-100%' },
+                '100%': { left: '100%' }
+              }
+            },
+            animation: {
+              'scan': 'scan 2s linear infinite',
+              'pulse-neon': 'pulse-neon 4s infinite ease-in-out',
+              'glitch': 'glitch 1s infinite linear alternate-reverse',
+              'progress-infinite': 'progress-infinite 2s linear infinite',
+            },
+          }
+        }
+      }
+    </script>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;700&family=Outfit:wght@200;400;600;900&display=swap');
+      
+      body {
+        font-family: 'Outfit', sans-serif;
+        background-color: #050505;
+        color: #f0f0f0;
+        overflow: hidden;
+      }
+
+      .font-mono-data {
+        font-family: 'JetBrains Mono', monospace;
+      }
+
+      .glass-card {
+        background: rgba(10, 10, 10, 0.75);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(0, 240, 255, 0.15);
+      }
+
+      .neon-glow-blue {
+        box-shadow: 0 0 20px rgba(0, 240, 255, 0.15);
+      }
+
+      .neon-glow-teal {
+        box-shadow: 0 0 20px rgba(0, 255, 148, 0.15);
+      }
+
+      .custom-scrollbar::-webkit-scrollbar {
+        width: 3px;
+      }
+      .custom-scrollbar::-webkit-scrollbar-track {
+        background: rgba(0, 0, 0, 0.3);
+      }
+      .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: #00F0FF;
+        border-radius: 10px;
+      }
+
+      /* Scanline Effect */
+      body::before {
+        content: " ";
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 255, 0, 0.06));
+        z-index: 100;
+        background-size: 100% 2px, 3px 100%;
+        pointer-events: none;
+      }
+    </style>
+<link rel="stylesheet" href="/index.css">
+</head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+  </body>
+</html>
